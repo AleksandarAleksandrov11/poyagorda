@@ -1,0 +1,266 @@
+---
+const truths = [
+  ['Pagaste una web que no visita ', 'ni tu madre.'],
+  ['Tu community manager es ', 'tu sobrino.'],
+  ['Pagas anuncios para que te vean ', 'tus competidores.'],
+  ['Y llevas años ', 'tirando el dinero', ' sin saber en qué.'],
+];
+---
+
+<section class="truth" id="verdad" aria-labelledby="truth-title">
+  <div class="container">
+    <p class="eyebrow truth__hint" id="truth-title">
+      <span class="truth__hint-fine">Mueve el ratón. Aquí hay cosas que no quieres leer.</span>
+      <span class="truth__hint-coarse">Toca la pantalla. Aquí hay cosas que no quieres leer.</span>
+    </p>
+
+    <div class="spot" data-spot>
+      <div class="spot__beam" aria-hidden="true"></div>
+      <ul class="spot__layer spot__base display" aria-hidden="true">
+        {truths.map(([a, b, c]) => <li>{a}{b}{c}</li>)}
+      </ul>
+      <ul class="spot__layer spot__lit display">
+        {truths.map(([a, b, c]) => <li>{a}<span class="y">{b}</span>{c}</li>)}
+      </ul>
+    </div>
+
+    <div class="manifesto">
+      <p class="eyebrow">Lo que hacemos. Más o menos.</p>
+      <ul class="manifesto__nope display" data-strikes>
+        <li><span>No vendemos webs.</span></li>
+        <li><span>Ni seguidores.</span></li>
+        <li><span>Ni humo.</span></li>
+      </ul>
+      <p class="manifesto__yes display">
+        Te auditamos el negocio y te decimos <span class="y">la puta verdad.</span>
+      </p>
+      <p class="manifesto__small">
+        Qué te sobra, qué te falta y en qué no tienes que gastarte ni un euro más. Sin anestesia y sin gilipolleces.
+        Lo demás, de momento, es secreto.
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .truth {
+    position: relative;
+    overflow: clip;
+    padding: clamp(80px, 12vw, 160px) 0 clamp(80px, 10vw, 140px);
+  }
+
+  .truth__hint {
+    margin-bottom: clamp(24px, 4vw, 44px);
+  }
+
+  .truth__hint-coarse {
+    display: none;
+  }
+
+  @media (hover: none) {
+    .truth__hint-fine {
+      display: none;
+    }
+
+    .truth__hint-coarse {
+      display: inline;
+    }
+  }
+
+  .spot {
+    --x: 50%;
+    --y: 0px;
+    --r: 220px;
+    position: relative;
+    display: grid;
+    cursor: crosshair;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .spot__layer {
+    grid-area: 1 / 1;
+    display: grid;
+    gap: 0.28em;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: clamp(32px, 5.8vw, 84px);
+    font-stretch: 72%;
+    line-height: 0.95;
+    letter-spacing: -0.025em;
+  }
+
+  .spot__base {
+    color: #0f0f0e;
+  }
+
+  .spot__lit {
+    color: var(--white);
+    -webkit-mask-image: radial-gradient(circle var(--r) at var(--x) var(--y), #000 0%, #000 30%, transparent 100%);
+    mask-image: radial-gradient(circle var(--r) at var(--x) var(--y), #000 0%, #000 30%, transparent 100%);
+  }
+
+  .spot__beam {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: calc(var(--r) * 3.2);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    pointer-events: none;
+    translate: calc(var(--x) - 50%) calc(var(--y) - 50%);
+    background: radial-gradient(closest-side, rgb(249 222 49 / 0.075), rgb(249 222 49 / 0.02) 55%, transparent);
+  }
+
+  .spot--all .spot__beam {
+    display: none;
+  }
+
+  .spot--all .spot__lit {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .manifesto {
+    margin-top: clamp(90px, 14vw, 180px);
+    max-width: 1000px;
+  }
+
+  .manifesto__nope {
+    display: grid;
+    gap: 0.06em;
+    margin: 22px 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: clamp(36px, 6vw, 84px);
+    font-stretch: 100%;
+    color: var(--dim);
+  }
+
+  .manifesto__nope span {
+    position: relative;
+    display: inline-block;
+  }
+
+  .manifesto__nope span::after {
+    content: '';
+    position: absolute;
+    left: -0.04em;
+    right: -0.04em;
+    top: 50%;
+    height: 0.09em;
+    background: var(--yellow);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.7s var(--ease-out);
+  }
+
+  .manifesto__nope li:nth-child(2) span::after {
+    transition-delay: 0.25s;
+  }
+
+  .manifesto__nope li:nth-child(3) span::after {
+    transition-delay: 0.5s;
+  }
+
+  .manifesto__nope.is-in span::after {
+    transform: scaleX(1);
+  }
+
+  .manifesto__yes {
+    margin-top: clamp(28px, 4vw, 44px);
+    font-size: clamp(30px, 4.6vw, 64px);
+    font-stretch: 92%;
+    line-height: 0.98;
+  }
+
+  .manifesto__small {
+    max-width: 560px;
+    margin-top: 24px;
+    color: var(--muted);
+    font-size: clamp(16px, 1.25vw, 19px);
+  }
+</style>
+
+<script>
+  const spot = document.querySelector<HTMLElement>('[data-spot]');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (spot && reduce) {
+    spot.classList.add('spot--all');
+  } else if (spot) {
+    let rect = spot.getBoundingClientRect();
+    let target = { x: rect.width / 2, y: 0 };
+    let pos = { ...target };
+    let lastManual = -Infinity;
+    let pointer = { x: 0, y: 0 };
+    let mouseInside = false;
+    let running = false;
+    let raf = 0;
+
+    const measure = () => {
+      rect = spot.getBoundingClientRect();
+      const r = Math.round(Math.min(280, Math.max(130, rect.width * 0.24)));
+      spot.style.setProperty('--r', `${r}px`);
+    };
+
+    const setManual = (clientX: number, clientY: number) => {
+      pointer = { x: clientX, y: clientY };
+      lastManual = performance.now();
+    };
+
+    spot.addEventListener('pointermove', (e) => {
+      if (e.pointerType === 'mouse' || e.pointerType === 'pen') setManual(e.clientX, e.clientY);
+    });
+    spot.addEventListener('pointerdown', (e) => setManual(e.clientX, e.clientY));
+    spot.addEventListener('pointerenter', (e) => {
+      if (e.pointerType === 'mouse') mouseInside = true;
+    });
+    spot.addEventListener('pointerleave', (e) => {
+      if (e.pointerType === 'mouse') mouseInside = false;
+    });
+
+    const tick = (t: number) => {
+      rect = spot.getBoundingClientRect();
+      if (mouseInside || t - lastManual <= 2200) {
+        // Coordenadas de pantalla: si haces scroll con el ratón quieto, la luz se queda donde apuntas.
+        target = { x: pointer.x - rect.left, y: pointer.y - rect.top };
+      } else {
+        // Modo automático: la linterna baja con el scroll y se pasea a lo ancho.
+        const vh = window.innerHeight;
+        const progress = Math.min(1, Math.max(0, (vh * 0.62 - rect.top) / rect.height));
+        target = {
+          x: rect.width * (0.5 + Math.sin(t / 900) * 0.36),
+          y: rect.height * progress + Math.sin(t / 650) * 18,
+        };
+      }
+      pos.x += (target.x - pos.x) * 0.12;
+      pos.y += (target.y - pos.y) * 0.12;
+      spot.style.setProperty('--x', `${pos.x.toFixed(1)}px`);
+      spot.style.setProperty('--y', `${pos.y.toFixed(1)}px`);
+      if (running) raf = requestAnimationFrame(tick);
+    };
+
+    measure();
+    window.addEventListener('resize', measure, { passive: true });
+
+    new IntersectionObserver(([entry]) => {
+      running = entry.isIntersecting;
+      cancelAnimationFrame(raf);
+      if (running) raf = requestAnimationFrame(tick);
+    }).observe(spot);
+  }
+
+  const strikes = document.querySelector('[data-strikes]');
+  if (strikes) {
+    new IntersectionObserver(
+      ([entry], obs) => {
+        if (entry.isIntersecting) {
+          strikes.classList.add('is-in');
+          obs.disconnect();
+        }
+      },
+      { threshold: 0.6 },
+    ).observe(strikes);
+  }
+</script>

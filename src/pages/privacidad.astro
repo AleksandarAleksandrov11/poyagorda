@@ -1,0 +1,87 @@
+---
+import Legal from '../layouts/Legal.astro';
+import { legal, brand, newsletterProcessor } from '../config/site';
+---
+
+<Legal title="Política de privacidad" kicker="Tus datos. En serio." description="Política de privacidad de POYAGORDA: qué datos tratamos, para qué y cómo ejercer tus derechos.">
+  <p class="lead">Nos pasamos el día soltando tacos, pero con tus datos no jugamos. Aquí te contamos qué hacemos con ellos, sin letra pequeña.</p>
+
+  <h2>1. Responsable del tratamiento</h2>
+  <ul>
+    <li><strong>Responsable:</strong> {legal.owner}</li>
+    <li><strong>NIF/CIF:</strong> {legal.taxId}</li>
+    <li><strong>Domicilio:</strong> {legal.address}</li>
+    <li><strong>Email de contacto y privacidad:</strong> {legal.email}</li>
+  </ul>
+
+  <h2>2. Qué datos tratamos</h2>
+  <ul>
+    <li><strong>Email</strong>, obligatorio para enviarte la newsletter.</li>
+    <li><strong>Nombre</strong>, opcional, para dirigirnos a ti.</li>
+    <li><strong>Respuestas del cuestionario</strong> de la web (si tienes negocio, cuánto has gastado en marketing, etc.), opcionales, para entender mejor a quién escribimos.</li>
+    <li><strong>Datos de prueba del consentimiento:</strong> fecha y hora, dirección IP, navegador y versión del texto legal que aceptaste.</li>
+    <li><strong>Datos de navegación anónimos y agregados</strong>, solo si aceptas la analítica. Ver la <a href="/cookies">Política de Cookies</a>.</li>
+  </ul>
+  <p>No pedimos datos especialmente protegidos. No compramos bases de datos ni hacemos perfiles automatizados con efectos jurídicos sobre ti.</p>
+
+  <h2>3. Para qué los usamos y con qué base legal</h2>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Finalidad</th><th>Base jurídica</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Enviarte la newsletter de {brand.name}: novedades, contenidos y comunicaciones comerciales sobre nuestros propios servicios.</td>
+          <td>Tu consentimiento (art. 6.1.a RGPD y art. 21 LSSI-CE). Puedes retirarlo cuando quieras.</td>
+        </tr>
+        <tr>
+          <td>Conocer mejor a nuestra audiencia a partir de las respuestas opcionales del cuestionario.</td>
+          <td>Tu consentimiento (art. 6.1.a RGPD).</td>
+        </tr>
+        <tr>
+          <td>Guardar la prueba de que diste tu consentimiento.</td>
+          <td>Cumplimiento de una obligación legal (art. 6.1.c y art. 7.1 RGPD).</td>
+        </tr>
+        <tr>
+          <td>Responder a las consultas o solicitudes que nos envíes por email.</td>
+          <td>Tu consentimiento y, en su caso, la aplicación de medidas precontractuales (art. 6.1.a y 6.1.b RGPD).</td>
+        </tr>
+        <tr>
+          <td>Medir de forma anónima y agregada el uso de la web.</td>
+          <td>Tu consentimiento, que nos das en el aviso de cookies.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>4. Cuánto tiempo los guardamos</h2>
+  <p>Mientras sigas suscrito. Cuando te des de baja dejaremos de usarlos y los conservaremos bloqueados solo durante los plazos legales en los que puedan exigirse responsabilidades (con carácter general, hasta 3 años), y después los eliminaremos.</p>
+
+  <h2>5. Con quién los compartimos</h2>
+  <p>No vendemos ni cedemos tus datos a terceros, salvo obligación legal. Sí trabajamos con proveedores que los tratan por cuenta nuestra (encargados del tratamiento), con contrato y garantías conforme al artículo 28 RGPD:</p>
+  <ul>
+    <li><strong>{newsletterProcessor.name}</strong>, {newsletterProcessor.location}: plataforma de email marketing donde se guarda la lista y desde la que se envía la newsletter. <a href={newsletterProcessor.privacyUrl} target="_blank" rel="noopener noreferrer">Su política de privacidad</a>.</li>
+    <li><strong>Vercel Inc.</strong>, Estados Unidos: alojamiento de la web y, si la aceptas, analítica anónima. <a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer">Su política de privacidad</a>.</li>
+  </ul>
+
+  <h2>6. Transferencias internacionales</h2>
+  <p>Vercel Inc. está ubicada en Estados Unidos y adherida al Marco de Privacidad de Datos UE-EE. UU. (Data Privacy Framework), que cuenta con una decisión de adecuación de la Comisión Europea. Además, aplica Cláusulas Contractuales Tipo aprobadas por la Comisión.</p>
+
+  <h2>7. Tus derechos</h2>
+  <p>Puedes ejercer en cualquier momento tus derechos de acceso, rectificación, supresión, oposición, limitación del tratamiento y portabilidad, así como retirar tu consentimiento sin que ello afecte a la licitud del tratamiento previo.</p>
+  <ul>
+    <li><strong>Darte de baja de la newsletter:</strong> con el enlace que aparece al final de cada correo. Un clic y fuera.</li>
+    <li><strong>Resto de derechos:</strong> escribe a {legal.email} indicando qué derecho quieres ejercer. Si tenemos dudas razonables sobre tu identidad, podremos pedirte información adicional para confirmarla.</li>
+  </ul>
+  <p>Si crees que no hemos tratado bien tus datos, puedes reclamar ante la Agencia Española de Protección de Datos en <a href="https://www.aepd.es" target="_blank" rel="noopener noreferrer">www.aepd.es</a>.</p>
+
+  <h2>8. Menores</h2>
+  <p>Para suscribirte debes tener al menos 14 años, conforme al artículo 7 de la LOPDGDD. Si tienes menos, pide a tus padres o tutores que lo hagan por ti, o mejor, vuelve en unos años.</p>
+
+  <h2>9. Seguridad</h2>
+  <p>Aplicamos medidas técnicas y organizativas razonables para proteger tus datos: conexión cifrada (HTTPS), acceso restringido a las herramientas y proveedores que cumplen el RGPD.</p>
+
+  <h2>10. Cambios en esta política</h2>
+  <p>Podemos actualizar esta política para adaptarla a cambios legales o de funcionamiento. Publicaremos aquí la versión vigente con su fecha. Si el cambio es importante, te avisaremos por email.</p>
+</Legal>

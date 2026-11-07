@@ -1,0 +1,33 @@
+---
+import Legal from '../layouts/Legal.astro';
+import { legal, brand } from '../config/site';
+---
+
+<Legal title="Condiciones de la newsletter" kicker="Las reglas del club." description="Condiciones de suscripción a la newsletter de POYAGORDA.">
+  <p class="lead">Entrar es gratis. Salir, también. Lo demás, aquí.</p>
+
+  <h2>1. Qué es</h2>
+  <p>La newsletter de {brand.name} es un correo que enviamos de vez en cuando con novedades del proyecto, ideas sobre marketing y negocio, contenido exclusivo y, a veces, ofertas de nuestros propios servicios. Sin calendario fijo y sin bombardearte.</p>
+
+  <h2>2. Requisitos</h2>
+  <ul>
+    <li>Tener 14 años o más.</li>
+    <li>Usar un email propio y real. Nada de apuntar al vecino.</li>
+    <li>Aceptar la <a href="/privacidad">Política de Privacidad</a>.</li>
+  </ul>
+
+  <h2>3. Confirmación</h2>
+  <p>Al suscribirte puede que te enviemos un correo para confirmar tu dirección (doble opt-in). Hasta que no lo confirmes, no te añadiremos a la lista. Si no te llega, revisa la carpeta de spam o promociones.</p>
+
+  <h2>4. Baja</h2>
+  <p>Puedes darte de baja cuando quieras, gratis y sin dar explicaciones, con el enlace que aparece al final de cada correo o escribiendo a {legal.email}.</p>
+
+  <h2>5. Tono y contenidos</h2>
+  <p>Escribimos como hablamos: directo, con humor y con algún que otro taco. Si eso te molesta, esta newsletter no es para ti y no pasa nada. Los contenidos son informativos y no sustituyen un asesoramiento profesional adaptado a tu caso. No garantizamos resultados concretos por aplicar lo que contamos.</p>
+
+  <h2>6. Cambios y fin del servicio</h2>
+  <p>Podemos modificar estas condiciones o dejar de enviar la newsletter en cualquier momento. Si cambian de forma relevante, te avisaremos.</p>
+
+  <h2>7. Ley aplicable</h2>
+  <p>Estas condiciones se rigen por la legislación española. Encontrarás los datos del titular en el <a href="/aviso-legal">Aviso legal</a>.</p>
+</Legal>
