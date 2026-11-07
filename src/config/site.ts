@@ -1,7 +1,6 @@
 /**
  * Todo lo que hay que tocar sin meterse en el código está aquí.
- * Los campos marcados con [PENDIENTE] salen tal cual en las páginas legales
- * hasta que los rellenes. No publiques sin rellenarlos.
+ * Estos datos salen en el aviso legal, la privacidad y el formulario.
  */
 
 export const brand = {
@@ -18,13 +17,13 @@ export const brand = {
 
 export const legal = {
   /** Nombre y apellidos (autónomo) o razón social (sociedad). */
-  owner: '[PENDIENTE: nombre completo o razón social]',
+  owner: 'Alejandro Sánchez García',
   /** NIF o CIF. */
-  taxId: '[PENDIENTE: NIF/CIF]',
+  taxId: '05333488H',
   /** Domicilio completo. */
-  address: '[PENDIENTE: domicilio completo]',
+  address: 'Calle Carrión de los Condes, 77',
   /** Email para contacto y ejercicio de derechos RGPD. */
-  email: '[PENDIENTE: email de contacto]',
+  email: 'info@poyagorda.com',
   /** Solo sociedades: datos del Registro Mercantil. Déjalo vacío si eres autónomo. */
   registry: '',
   /** Fecha de la última revisión de los textos legales. */

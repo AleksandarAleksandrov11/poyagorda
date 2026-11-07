@@ -42,16 +42,13 @@ Tras confirmar, Brevo manda al usuario a `/confirmado`.
 
 `NEWSLETTER_WEBHOOK_URL` recibe un POST JSON con `email`, `name`, `answers` (respuestas del cuestionario), `consentVersion`, `consentAt`, `ip`, `userAgent`. Puede ser el destino único (`NEWSLETTER_PROVIDER=webhook`) o una copia además de Brevo/MailerLite. Si defines `NEWSLETTER_WEBHOOK_SECRET`, llega en la cabecera `x-webhook-secret`.
 
-## Antes de publicar: datos legales
+## Datos legales
 
-Rellena `src/config/site.ts`. Todo lo que pone `[PENDIENTE]` sale tal cual en el aviso legal, la privacidad y el formulario:
+Están en `src/config/site.ts` y salen en el aviso legal, la privacidad y el formulario. Cualquier cambio (domicilio, email, pasar a sociedad...) se hace ahí.
 
-- `legal.owner`: nombre completo o razón social
-- `legal.taxId`: NIF/CIF
-- `legal.address`: domicilio
-- `legal.email`: email de contacto y derechos RGPD
-- `legal.registry`: datos del Registro Mercantil (solo sociedades)
-- `brand.tiktok`: URL de TikTok cuando exista
+- `legal.registry`: solo si en algún momento hay sociedad (datos del Registro Mercantil).
+- `brand.tiktok`: URL de TikTok cuando exista.
+- El email `info@poyagorda.com` tiene que existir y recibir correo: es donde la gente ejerce sus derechos RGPD.
 
 Si cambias el texto de la casilla de consentimiento, sube `CONSENT_VERSION`.
 

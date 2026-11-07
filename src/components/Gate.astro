@@ -49,7 +49,7 @@ import { legal, newsletterProcessor, CONSENT_VERSION } from '../config/site';
         <strong>Finalidad:</strong>{' '}enviarte la newsletter y novedades de POYAGORDA.{' '}
         <strong>Legitimación:</strong>{' '}tu consentimiento.{' '}
         <strong>Destinatarios:</strong>{' '}{newsletterProcessor.name}, como encargado del tratamiento.{' '}
-        <strong>Derechos:</strong>{' '}acceso, rectificación, supresión y demás, escribiendo a {legal.email}.{' '}
+        <strong>Derechos:</strong>{' '}acceso, rectificación, supresión y demás, escribiendo a <a href={`mailto:${legal.email}`}>{legal.email}</a>.{' '}
         Más info en la <a href="/privacidad" target="_blank">Política de Privacidad</a>.
       </p>
       <button type="submit" class="btn term__submit" data-submit>Meterme dentro</button>
