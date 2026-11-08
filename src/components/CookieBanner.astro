@@ -1,0 +1,237 @@
+---
+---
+
+<div class="cookies" data-cookies hidden>
+  <div class="cookies__card" role="dialog" aria-modal="false" aria-labelledby="cookies-title" aria-describedby="cookies-desc">
+    <p id="cookies-title" class="cookies__title">Cookies. Las de chocolate no, listillo.</p>
+    <p id="cookies-desc" class="cookies__text">
+      Usamos lo técnico porque sin eso esto no funciona. Y si nos dejas, medimos las visitas de forma anónima para
+      saber cuánta gente cotilla por aquí. Tú decides. <a href="/cookies">Más info</a>.
+    </p>
+
+    <form class="cookies__prefs" data-cookie-prefs hidden>
+      <label class="cookies__row">
+        <input type="checkbox" checked disabled />
+        <span><strong>Técnicas.</strong> Siempre activas. Recuerdan lo que eliges aquí.</span>
+      </label>
+      <label class="cookies__row">
+        <input type="checkbox" name="analytics" data-cookie-analytics />
+        <span><strong>Analítica.</strong> Vercel Analytics, anónima y sin cookies de seguimiento.</span>
+      </label>
+    </form>
+
+    <div class="cookies__actions">
+      <button type="button" class="cookies__btn" data-cookie-reject>Rechazar</button>
+      <button type="button" class="cookies__btn" data-cookie-accept>Aceptar</button>
+      <button type="button" class="cookies__link" data-cookie-config aria-expanded="false">Configurar</button>
+      <button type="button" class="cookies__btn cookies__btn--save" data-cookie-save hidden>Guardar</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .cookies {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 80;
+    display: flex;
+    justify-content: flex-start;
+    padding: 16px;
+    padding-bottom: calc(16px + env(safe-area-inset-bottom, 0));
+    pointer-events: none;
+  }
+
+  .cookies[hidden] {
+    display: none;
+  }
+
+  .cookies__card {
+    width: min(100%, 440px);
+    padding: 22px;
+    background: var(--ink-2);
+    border: 1px solid var(--line);
+    box-shadow: 0 30px 80px rgb(0 0 0 / 0.6);
+    pointer-events: auto;
+    animation: cookies-in 0.6s var(--ease-out) both;
+  }
+
+  @keyframes cookies-in {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+  }
+
+  .cookies__title {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: 17px;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    color: var(--white);
+  }
+
+  .cookies__text {
+    margin-top: 10px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+
+  .cookies__text a {
+    color: var(--white);
+  }
+
+  .cookies__prefs {
+    display: grid;
+    gap: 12px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+  }
+
+  .cookies__prefs[hidden] {
+    display: none;
+  }
+
+  .cookies__row {
+    display: grid;
+    grid-template-columns: 20px 1fr;
+    gap: 10px;
+    align-items: start;
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--muted);
+  }
+
+  .cookies__row strong {
+    color: var(--white);
+  }
+
+  .cookies__row input {
+    width: 18px;
+    height: 18px;
+    margin: 1px 0 0;
+    accent-color: var(--yellow);
+  }
+
+  .cookies__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-top: 18px;
+  }
+
+  /* Aceptar y rechazar, mismo peso. Así lo pide la AEPD. */
+  .cookies__btn {
+    flex: 1 1 0;
+    min-height: 44px;
+    padding: 0 16px;
+    border: 1px solid var(--white);
+    background: transparent;
+    color: var(--white);
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .cookies__btn:hover {
+    background: var(--yellow);
+    border-color: var(--yellow);
+    color: var(--black);
+  }
+
+  .cookies__btn[hidden] {
+    display: none;
+  }
+
+  .cookies__link {
+    flex-basis: 100%;
+    min-height: 32px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--muted);
+    font-size: 13px;
+    text-align: left;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .cookies__link:hover {
+    color: var(--yellow);
+  }
+
+  .cookies__link[hidden] {
+    display: none;
+  }
+
+  @media (max-width: 520px) {
+    .cookies {
+      padding: 0;
+    }
+
+    .cookies__card {
+      width: 100%;
+      padding: 20px 16px calc(18px + env(safe-area-inset-bottom, 0));
+      border-width: 1px 0 0;
+    }
+  }
+</style>
+
+<script>
+  import { readConsent, saveConsent, applyConsent } from '../scripts/consent';
+
+  const root = document.querySelector<HTMLElement>('[data-cookies]');
+  const prefs = document.querySelector<HTMLElement>('[data-cookie-prefs]');
+  const analyticsBox = document.querySelector<HTMLInputElement>('[data-cookie-analytics]');
+  const configBtn = document.querySelector<HTMLButtonElement>('[data-cookie-config]');
+  const saveBtn = document.querySelector<HTMLButtonElement>('[data-cookie-save]');
+  const acceptBtn = document.querySelector<HTMLButtonElement>('[data-cookie-accept]');
+  const rejectBtn = document.querySelector<HTMLButtonElement>('[data-cookie-reject]');
+
+  const current = readConsent();
+  applyConsent(current);
+
+  const open = (withPrefs = false) => {
+    if (!root || !prefs || !analyticsBox || !configBtn || !saveBtn) return;
+    analyticsBox.checked = readConsent()?.analytics ?? false;
+    prefs.hidden = !withPrefs;
+    saveBtn.hidden = !withPrefs;
+    configBtn.hidden = withPrefs;
+    configBtn.setAttribute('aria-expanded', String(withPrefs));
+    root.hidden = false;
+  };
+
+  const close = () => {
+    if (root) root.hidden = true;
+  };
+
+  const decide = (analytics: boolean) => {
+    const before = readConsent();
+    saveConsent(analytics);
+    close();
+    // Si retira el permiso con la analítica ya cargada, recargamos para descargarla.
+    if (before?.analytics && !analytics) window.location.reload();
+  };
+
+  if (!current) open(false);
+
+  acceptBtn?.addEventListener('click', () => decide(true));
+  rejectBtn?.addEventListener('click', () => decide(false));
+  configBtn?.addEventListener('click', () => open(true));
+  saveBtn?.addEventListener('click', () => decide(Boolean(analyticsBox?.checked)));
+
+  document.querySelectorAll('[data-cookie-settings]').forEach((el) =>
+    el.addEventListener('click', () => {
+      open(true);
+      analyticsBox?.focus();
+    }),
+  );
+</script>

@@ -1,0 +1,40 @@
+---
+import Legal from '../layouts/Legal.astro';
+import { legal, brand } from '../config/site';
+const host = Astro.site?.host ?? '';
+---
+
+<Legal title="Aviso legal" kicker="La parte aburrida. Pero obligatoria." description="Aviso legal de POYAGORDA: datos del titular y condiciones de uso de la web.">
+  <p class="lead">Aquí no hay palabrotas. Bueno, casi. Esto es lo que la ley nos obliga a contarte.</p>
+
+  <h2>1. Quién está detrás</h2>
+  <p>En cumplimiento del artículo 10 de la Ley 34/2002, de Servicios de la Sociedad de la Información y de Comercio Electrónico (LSSI-CE), te informamos de que este sitio web{host && <> ({host})</>} es titularidad de:</p>
+  <ul>
+    <li><strong>Titular:</strong> {legal.owner}</li>
+    <li><strong>NIF/CIF:</strong> {legal.taxId}</li>
+    <li><strong>Domicilio:</strong> {legal.address}</li>
+    <li><strong>Email:</strong> <a href={`mailto:${legal.email}`}>{legal.email}</a></li>
+    {legal.registry && <li><strong>Datos registrales:</strong> {legal.registry}</li>}
+    <li><strong>Nombre comercial:</strong> {brand.name}</li>
+  </ul>
+
+  <h2>2. Para qué sirve esta web</h2>
+  <p>Esta web presenta {brand.name}, un proyecto de marketing y auditoría de negocios, y permite suscribirse a su newsletter. El acceso es gratuito y no requiere registro, salvo para recibir la newsletter.</p>
+
+  <h2>3. Condiciones de uso</h2>
+  <p>Al navegar por esta web aceptas este aviso legal. Te comprometes a usarla de forma lícita, sin dañar su funcionamiento, sin intentar acceder a zonas restringidas y sin introducir datos falsos o de terceros en los formularios.</p>
+  <p>Esta web utiliza un tono deliberadamente provocador, con humor y lenguaje malsonante. Ese lenguaje forma parte del estilo de la marca y no se dirige a ninguna persona concreta. Si te ofende, lo sentimos, aunque solo un poco.</p>
+
+  <h2>4. Propiedad intelectual e industrial</h2>
+  <p>La marca {brand.name}, el logotipo, los textos, el diseño, el código y el resto de contenidos de esta web pertenecen a su titular o se usan con autorización. Queda prohibida su reproducción, distribución, transformación o comunicación pública sin permiso expreso y por escrito, salvo para uso personal y privado.</p>
+
+  <h2>5. Responsabilidad</h2>
+  <p>Hacemos lo posible para que la web funcione y la información sea correcta, pero no garantizamos la ausencia de errores o interrupciones. Los contenidos tienen carácter informativo y no constituyen asesoramiento profesional personalizado.</p>
+  <p>Si la web incluye enlaces a sitios de terceros (por ejemplo, redes sociales), no somos responsables de sus contenidos ni de sus políticas. Si detectas un contenido ilícito, escríbenos a <a href={`mailto:${legal.email}`}>{legal.email}</a> y lo retiraremos con diligencia.</p>
+
+  <h2>6. Protección de datos y cookies</h2>
+  <p>El tratamiento de tus datos personales se rige por nuestra <a href="/privacidad">Política de Privacidad</a> y el uso de cookies y tecnologías similares por nuestra <a href="/cookies">Política de Cookies</a>.</p>
+
+  <h2>7. Ley aplicable y jurisdicción</h2>
+  <p>Este aviso legal se rige por la legislación española. Para cualquier controversia, las partes se someten a los juzgados y tribunales que correspondan conforme a la normativa aplicable. Si eres consumidor, los del lugar de tu domicilio.</p>
+</Legal>
