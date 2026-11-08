@@ -21,9 +21,9 @@ export const legal = {
   /** NIF o CIF. */
   taxId: '05333488H',
   /** Domicilio completo. */
-  address: 'Calle Carrión de los Condes, 77',
+  address: 'Calle Carrión de los Condes, 77, 28033 Madrid',
   /** Email para contacto y ejercicio de derechos RGPD. */
-  email: 'info@poyagorda.com',
+  email: 'cuentanos@poyagorda.com',
   /** Solo sociedades: datos del Registro Mercantil. Déjalo vacío si eres autónomo. */
   registry: '',
   /** Fecha de la última revisión de los textos legales. */

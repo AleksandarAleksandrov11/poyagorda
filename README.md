@@ -48,7 +48,7 @@ Están en `src/config/site.ts` y salen en el aviso legal, la privacidad y el for
 
 - `legal.registry`: solo si en algún momento hay sociedad (datos del Registro Mercantil).
 - `brand.tiktok`: URL de TikTok cuando exista.
-- El email `info@poyagorda.com` tiene que existir y recibir correo: es donde la gente ejerce sus derechos RGPD.
+- El email `cuentanos@poyagorda.com` tiene que existir y recibir correo: es donde la gente ejerce sus derechos RGPD.
 
 Si cambias el texto de la casilla de consentimiento, sube `CONSENT_VERSION`.
 
