@@ -28,11 +28,13 @@ En local, sin proveedor configurado, el formulario funciona en modo prueba: no g
 ### Brevo (recomendado: empresa europea, gratis hasta 300 envíos al día, contactos ilimitados)
 
 1. Crea una cuenta en brevo.com y una lista en **Contactos > Listas**. Apunta su ID.
-2. Crea una plantilla de doble opt-in en **Campañas > Plantillas** con un botón que enlace a `{{ doubleoptin }}`. Apunta su ID.
-3. Crea una API key en **SMTP y API > Claves API**.
-4. En Vercel: `NEWSLETTER_PROVIDER=brevo`, `BREVO_API_KEY`, `BREVO_LIST_ID`, `BREVO_DOI_TEMPLATE_ID`.
+2. Verifica el dominio y el remitente (`marketing@poyagorda.com`) en Brevo.
+3. Crea una API key en **SMTP y API > Claves API** y desactiva la restricción de IPs en **Seguridad**.
+4. En Vercel: `NEWSLETTER_PROVIDER=brevo`, `BREVO_API_KEY`, `BREVO_LIST_ID`, `CONFIRM_SECRET` (texto largo aleatorio) y `SITE_URL`.
 
-Tras confirmar, Brevo manda al usuario a `/confirmado`.
+El doble opt-in lo hace la propia web: manda por Brevo el correo de `emails/confirmacion.html` con un enlace firmado que caduca en 48 horas. El contacto entra en la lista solo cuando lo pulsa. (Si prefieres la plantilla DOI nativa de Brevo, pon su ID en `BREVO_DOI_TEMPLATE_ID`.)
+
+Tras confirmar, el usuario llega a `/confirmado`.
 
 ### MailerLite
 

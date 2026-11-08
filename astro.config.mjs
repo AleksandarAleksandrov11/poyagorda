@@ -32,7 +32,7 @@ export default defineConfig({
   adapter: vercel(),
   integrations: [
     sitemap({
-      filter: (page) => !/\/(confirmado|404)$/.test(page),
+      filter: (page) => !/\/(confirmado|enlace-caducado|404)$/.test(page),
     }),
   ],
 });
