@@ -9,10 +9,25 @@ const letters = 'POYAGORDA'.split('');
 ---
 
 <Tag class:list={['logo', `logo--${size}`, { 'logo--anim': animate }]} data-logo>
-  <span class="sr-only">POYAGORDA.</span>
-  <span class="logo__word" aria-hidden="true">
-    {letters.map((l) => <span class="logo__l">{l}</span>)}
-  </span><span class="logo__dot" aria-hidden="true" data-logo-dot></span>
+  {
+    Tag === 'h1' ? (
+      <>
+        <span class="logo__word">
+          {letters.map((l) => <span class="logo__l">{l}</span>)}
+        </span>
+        <span class="logo__dot" aria-hidden="true" data-logo-dot />
+        <span class="sr-only">. Marketing con huevos.</span>
+      </>
+    ) : (
+      <>
+        <span class="sr-only">POYAGORDA.</span>
+        <span class="logo__word" aria-hidden="true">
+          {letters.map((l) => <span class="logo__l">{l}</span>)}
+        </span>
+        <span class="logo__dot" aria-hidden="true" data-logo-dot />
+      </>
+    )
+  }
 </Tag>
 
 <style>
