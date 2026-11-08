@@ -3,13 +3,8 @@ import { defineConfig } from 'astro/config';
 import vercel from '@astrojs/vercel';
 import sitemap from '@astrojs/sitemap';
 
-// URL pública. En Vercel se rellena sola con el dominio de producción del proyecto.
-// Si usas dominio propio, define SITE_URL en las variables de entorno de Vercel.
-const site =
-  process.env.SITE_URL ||
-  (process.env.VERCEL_PROJECT_PRODUCTION_URL
-    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-    : 'https://poyagorda.vercel.app');
+// URL pública canónica. Por defecto, el dominio de producción. Se puede cambiar con SITE_URL en Vercel.
+const site = process.env.SITE_URL || 'https://poyagorda.com';
 
 export default defineConfig({
   site,
