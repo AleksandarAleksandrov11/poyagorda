@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="supported-color-schemes" content="dark">
+<title>Confirma que quieres entrar</title>
+<style>
+  body { margin:0; padding:0; background:#050505; }
+  a { color:#f9de31; }
+  @media only screen and (max-width:620px) {
+    .wrap { width:100% !important; }
+    .pad { padding-left:22px !important; padding-right:22px !important; }
+    .logo { font-size:34px !important; }
+    .h1 { font-size:38px !important; line-height:38px !important; }
+    .btn a { display:block !important; }
+  }
+</style>
+</head>
+<body style="margin:0;padding:0;background:#050505;">
+<div style="display:none;max-height:0;overflow:hidden;opacity:0;color:#050505;font-size:1px;line-height:1px;">
+  Un clic y estás dentro. Si no fuiste tú, ignora esto. &#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;
+</div>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#050505;">
+  <tr>
+    <td align="center" style="padding:32px 12px;">
+      <table role="presentation" class="wrap" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px;max-width:600px;background:#0c0c0c;border:1px solid #232323;">
+
+        <tr>
+          <td class="pad" style="padding:34px 40px 0 40px;">
+            <span class="logo" style="font-family:'Arial Black',Arial,Helvetica,sans-serif;font-weight:900;font-size:30px;letter-spacing:-2px;color:#f3f2ec;text-transform:uppercase;">POYAGORDA<span style="color:#f9de31;">.</span></span>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="pad" style="padding:56px 40px 0 40px;">
+            <p style="margin:0 0 18px 0;font-family:'Courier New',Courier,monospace;font-size:12px;letter-spacing:3px;text-transform:uppercase;color:#8b8a84;">Último paso.</p>
+            <h1 class="h1" style="margin:0;font-family:'Arial Black',Arial,Helvetica,sans-serif;font-weight:900;font-size:50px;line-height:48px;letter-spacing:-2px;text-transform:uppercase;color:#f3f2ec;">
+              Casi dentro.<br><span style="color:#f9de31;">Falta un clic.</span>
+            </h1>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="pad" style="padding:28px 40px 0 40px;font-family:Arial,Helvetica,sans-serif;font-size:17px;line-height:26px;color:#c9c8c1;">
+            Has pedido entrar en POYAGORDA. Estamos preparando algo gordo y solo se lo vamos a contar a los que estén dentro.
+            <br><br>
+            Confirma que este email es tuyo. Si no lo haces, no existes.
+          </td>
+        </tr>
+
+        <tr>
+          <td class="pad btn" style="padding:36px 40px 0 40px;">
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td align="center" bgcolor="#f9de31" style="background:#f9de31;">
+                  <a href="{{ params.DOIurl }}" target="_blank" style="display:inline-block;padding:17px 34px;font-family:'Arial Black',Arial,Helvetica,sans-serif;font-weight:900;font-size:14px;letter-spacing:1.5px;text-transform:uppercase;color:#050505;text-decoration:none;">Meterme dentro</a>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="pad" style="padding:30px 40px 0 40px;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:20px;color:#8b8a84;">
+            Si el botón no funciona, copia y pega este enlace en tu navegador:<br>
+            <a href="{{ params.DOIurl }}" target="_blank" style="color:#f9de31;word-break:break-all;">{{ params.DOIurl }}</a>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="pad" style="padding:44px 40px 0 40px;">
+            <div style="height:1px;line-height:1px;background:#232323;font-size:1px;">&nbsp;</div>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="pad" style="padding:24px 40px 40px 40px;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:19px;color:#6b6a65;">
+            ¿No has sido tú? Ignora este correo y no pasará nada: no te apuntaremos a nada.<br><br>
+            Marketing con huevos.<br>
+            Alejandro Sánchez García · Calle Carrión de los Condes, 77, 28033 Madrid<br>
+            <a href="mailto:cuentanos@poyagorda.com" style="color:#8b8a84;">cuentanos@poyagorda.com</a> ·
+            <a href="https://poyagorda.com/privacidad" style="color:#8b8a84;">Privacidad</a>
+          </td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+</body>
+</html>
