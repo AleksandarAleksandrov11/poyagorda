@@ -2,7 +2,7 @@
 
 Documento de referencia para cualquiera (persona o IA) que tenga que trabajar en POYAGORDA. Recoge la marca, el negocio, la estrategia de lanzamiento, todos los textos de la web, cómo está montada, las cuentas y servicios, y lo que queda pendiente.
 
-Última actualización: 11 de noviembre de 2026.
+Última actualización: 11 de noviembre de 2026 (tarde).
 
 ---
 
@@ -101,15 +101,23 @@ Logo pequeño (aparece al dejar atrás el logo grande), enlace a Instagram y bot
 - "Vale. Has aguantado más que la mayoría. Estamos preparando algo gordo. Muy gordo. Y solo se lo vamos a contar a los que estén dentro."
 - Nombre (opcional, con bromas: si escribe un insulto, "Qué original. Te vamos a llamar Anónimo"), email ("El de verdad, no el que usas para el spam") y casilla legal. Botón **"Meterme dentro"**.
 
-**Camino B. "Estoy en ello"** (sin preguntas sobre su negocio):
-- "Llegas a tiempo de no cagarla. Seguimos." / "Montar un negocio tiene dos partes." / "La de tener una idea cojonuda." / "Y la de descubrir que tener una idea cojonuda no es suficiente." / "De vez en cuando contamos historias que igual te ahorran algún disgusto. O te provocan otro."
+**Camino B. "Estoy en ello"** (una pregunta para que participe, pero nada sobre su negocio):
+- "Llegas a tiempo de no cagarla."
+- **"¿Qué te está frenando para empezar?"** → No tengo ni puta idea de por dónde empezar ("Normal. Nadie lo sabe. La diferencia es que algunos lo admiten.") / Tengo la idea, pero me falta dinero ("El dinero se encuentra. Lo jodido es no tirarlo en lo que no toca.") / Estoy esperando el momento perfecto ("Spoiler: no existe. Pero vale, esperamos contigo un rato.")
+- "Montar un negocio tiene dos partes." / "La de tener una idea cojonuda." / "Y la de descubrir que tener una idea cojonuda no es suficiente." / "De vez en cuando contamos historias que igual te ahorran algún disgusto. O te provocan otro."
+- Nombre (opcional): "[Nombre]. Apuntado. Ahora a ver si lo montas."
 - **"¿Quieres que te las contemos?"** → email + casilla → botón **"Quiero estar dentro"**.
 - Nota: "Historias, ideas y alguna que otra verdad incómoda. Dos o tres correos a la semana. Baja cuando quieras."
 
 **Camino C. "No, solo cotilleo"**:
-- "Cotilla de mierda. Nos caes bien." / "No tienes un negocio. No quieres vendernos nada. Y aun así sigues aquí." / "Nos gusta la gente que pierde el tiempo con criterio." / "Te vamos a contar algo." / "Hay cosas que no vamos a publicar en Instagram." / "Historias, ideas y alguna que otra gilipollez que igual termina teniendo sentido."
+- "Cotilla de mierda. Nos caes bien."
+- **"¿Y tú qué cojones haces todavía aquí?"** → Me puede la curiosidad ("Dicen que la curiosidad mató al gato. Pero el gato murió sabiendo.") / Me está haciendo gracia esta mierda ("Esa es la idea. Aguanta, que lo mejor viene ahora.") / Quiero saber quién está detrás ("Todo a su tiempo. Primero queremos saber quién eres tú.")
+- "No tienes un negocio. No quieres vendernos nada. Y aun así sigues aquí." / "Nos gusta la gente que pierde el tiempo con criterio." / "Te vamos a contar algo." / "Hay cosas que no vamos a publicar en Instagram." / "Historias, ideas y alguna que otra gilipollez que igual termina teniendo sentido."
+- Nombre (opcional): "[Nombre]. Nombre de cotilla profesional."
 - **"¿Quieres seguir cotilleando?"** → email + casilla → botón **"Soy un cotilla. ¿Y qué?"**.
 - Nota: "Dos o tres correos a la semana. Sin spam. Puedes darte de baja cuando quieras."
+
+Valoración del cliente (11/11): un 9,5 sobre 10. Pidió que los caminos B y C tuvieran una pregunta (que el visitante interactúe y no sea un simple lector) y que los tres pidieran el nombre. Hecho. Las respuestas a esas preguntas se guardan como `freno` y `motivo` (solo llegan al webhook, si lo hay).
 
 Detalles comunes: si el email está mal, insulta ("Eso no es un email ni de coña. Otra vez."); corrige erratas tipo "gmial.com"; sin marcar la casilla: "Sin marcar la casilla no hay fiesta. Es la ley, no nos mires así." Al enviar, la pantalla se llena de amarillo: **"Casi dentro."** "Te acabamos de mandar un correo. Ábrelo y confirma, o no existes. Mira en spam, que nos conocemos." Botón "Vale, pesados".
 

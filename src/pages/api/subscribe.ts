@@ -4,7 +4,7 @@ import { subscribe, ProviderError, type Subscriber } from '../../lib/newsletter'
 export const prerender = false;
 
 const EMAIL_RE = /^[^\s@]+@[^\s@.]+(\.[^\s@.]+)*\.[a-z]{2,}$/i;
-const ALLOWED_ANSWER_KEYS = ['negocio', 'gasto', 'claridad'];
+const ALLOWED_ANSWER_KEYS = ['negocio', 'gasto', 'claridad', 'freno', 'motivo'];
 
 // Límite de intentos por IP. Vive en la memoria de cada instancia: frena a los pesados, no a un ejército.
 const WINDOW_MS = 10 * 60 * 1000;
