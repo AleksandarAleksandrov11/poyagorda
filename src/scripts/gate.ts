@@ -1,6 +1,6 @@
 /**
- * El interrogatorio. Una terminal que te hace tres preguntas, te insulta un poco
- * y acaba pidiéndote el email. Todo el texto está aquí arriba para tocarlo fácil.
+ * El interrogatorio. Una terminal con tres caminos según la primera respuesta,
+ * que te insulta un poco y acaba pidiéndote el email. Todo el texto está aquí arriba para tocarlo fácil.
  */
 import { track } from './consent';
 
@@ -10,7 +10,7 @@ type Question = { key: string; ask: string; options: Option[] };
 const INTRO = [
   'Vaya. Otro curioso.',
   'Esto es un acceso restringido. Solo entra gente con huevos. O con ovarios, que aquí no discriminamos.',
-  'Tres preguntas. Rapidito.',
+  'Rapidito, que no tenemos todo el día.',
 ];
 
 const QUESTIONS: Question[] = [
@@ -42,6 +42,43 @@ const QUESTIONS: Question[] = [
     ],
   },
 ];
+
+/**
+ * Caminos cortos: "Estoy en ello" y "Solo cotilleo" no preguntan por el negocio.
+ * Cuentan algo y van directos al email. (El índice coincide con la opción de la primera pregunta.)
+ */
+type Path = { lines: string[]; cta: string; button: string; note: string };
+const PATHS: Record<number, Path> = {
+  1: {
+    lines: [
+      'Llegas a tiempo de no cagarla. Seguimos.',
+      'Montar un negocio tiene dos partes.',
+      'La de tener una idea cojonuda.',
+      'Y la de descubrir que tener una idea cojonuda no es suficiente.',
+      'De vez en cuando contamos historias que igual te ahorran algún disgusto. O te provocan otro.',
+    ],
+    cta: '¿Quieres que te las contemos?',
+    button: 'Quiero estar dentro',
+    note: 'Historias, ideas y alguna que otra verdad incómoda. Dos o tres correos a la semana. Baja cuando quieras.',
+  },
+  2: {
+    lines: [
+      'Cotilla de mierda. Nos caes bien.',
+      'No tienes un negocio. No quieres vendernos nada. Y aun así sigues aquí.',
+      'Nos gusta la gente que pierde el tiempo con criterio.',
+      '',
+      'Te vamos a contar algo.',
+      'Hay cosas que no vamos a publicar en Instagram.',
+      'Historias, ideas y alguna que otra gilipollez que igual termina teniendo sentido.',
+    ],
+    cta: '¿Quieres seguir cotilleando?',
+    button: 'Soy un cotilla. ¿Y qué?',
+    note: 'Dos o tres correos a la semana. Sin spam. Puedes darte de baja cuando quieras.',
+  },
+};
+
+const MAIN_BUTTON = 'Meterme dentro';
+const MAIN_NOTE = 'Dos o tres correos a la semana. Sin spam. Baja cuando quieras.';
 
 const PRE_NAME = [
   'Vale. Has aguantado más que la mayoría.',
@@ -134,10 +171,17 @@ export function initGate() {
     sr.appendChild(p);
   };
 
-  async function print(text: string, kind: 'say' | 'sys' | 'you' | 'err' | 'ask' = 'say', myRun = run) {
+  async function print(text: string, kind: 'say' | 'sys' | 'you' | 'err' | 'ask' | 'cta' = 'say', myRun = run) {
     if (myRun !== run) return;
+    if (!text) {
+      const gap = document.createElement('div');
+      gap.className = 't-gap';
+      log.appendChild(gap);
+      await sleep(fast || reduceMotion ? 40 : 260);
+      return;
+    }
     const line = document.createElement('p');
-    line.className = `t-line t-${kind === 'ask' ? 'say t-ask' : kind}`;
+    line.className = `t-line t-${kind === 'ask' ? 'say t-ask' : kind === 'cta' ? 'say t-ask t-cta' : kind}`;
     log.appendChild(line);
     announce(kind === 'you' ? `Tú: ${text}` : text);
 
@@ -255,14 +299,36 @@ export function initGate() {
 
   let consentResolve: ((v: { website: string; origin: DOMRect }) => void) | null = null;
 
-  function consent(): Promise<{ website: string; origin: DOMRect }> {
+  type ConsentOpts = { withEmail?: boolean; button: string; note: string };
+
+  /** Validación del email con sus insultos. Devuelve el email bueno o null. */
+  async function checkEmail(raw: string, input?: HTMLInputElement): Promise<string | null> {
+    const email = raw.trim().toLowerCase();
+    if (!EMAIL_RE.test(email) || email.length > 254) {
+      await print(BAD_EMAIL[Math.min(badEmails++, BAD_EMAIL.length - 1)], 'err');
+      input?.focus();
+      return null;
+    }
+    const [user, domain] = email.split('@');
+    const fix = TYPO_DOMAINS[domain];
+    if (fix && input) {
+      // En el formulario corto lo corregimos en el campo y que vuelva a pulsar.
+      input.value = `${user}@${fix}`;
+      await print(`¿${domain}? Querrás decir ${fix}, figura. Te lo he corregido. Dale otra vez.`, 'err');
+      input.focus();
+      return null;
+    }
+    return email;
+  }
+
+  function consent(opts: ConsentOpts): Promise<{ website: string; origin: DOMRect }> {
     return new Promise((resolve) => {
       consentResolve = resolve;
       // Si el formulario ya está (reintento tras error), se reutiliza tal cual.
       const existing = controls.querySelector<HTMLButtonElement>('.term__consent [data-submit]');
       if (existing) {
         existing.disabled = false;
-        existing.textContent = 'Meterme dentro';
+        existing.textContent = opts.button;
         return;
       }
       clearControls();
@@ -271,9 +337,22 @@ export function initGate() {
       const box = form.querySelector<HTMLInputElement>('[data-consent]')!;
       const label = box.closest('label')!;
       const submit = form.querySelector<HTMLButtonElement>('[data-submit]')!;
+      const emailRow = form.querySelector<HTMLElement>('[data-email-row]')!;
+      const emailInput = form.querySelector<HTMLInputElement>('input[name="email"]')!;
+      const note = form.querySelector<HTMLElement>('[data-note]')!;
+      submit.textContent = opts.button;
+      note.textContent = opts.note;
+      emailRow.hidden = !opts.withEmail;
+      emailInput.disabled = !opts.withEmail;
       box.addEventListener('change', () => label.classList.remove('is-wrong'));
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
+        if (!consentResolve || submit.disabled) return;
+        if (opts.withEmail) {
+          const ok = await checkEmail(emailInput.value, emailInput);
+          if (!ok) return;
+          state.email = ok;
+        }
         if (!box.checked) {
           label.classList.remove('is-wrong');
           void label.offsetWidth;
@@ -282,7 +361,7 @@ export function initGate() {
           box.focus();
           return;
         }
-        if (!consentResolve || submit.disabled) return;
+        if (!consentResolve) return;
         const website = (form.querySelector<HTMLInputElement>('input[name="website"]')?.value || '').trim();
         const done = consentResolve;
         consentResolve = null;
@@ -290,6 +369,7 @@ export function initGate() {
       });
       controls.appendChild(frag);
       fast = false;
+      if (opts.withEmail && finePointer) emailInput.focus({ preventScroll: true });
     });
   }
 
@@ -373,7 +453,30 @@ export function initGate() {
     await printAll(INTRO);
     if (!alive()) return;
 
-    for (const q of QUESTIONS) {
+    // Primera pregunta: decide el camino.
+    const first = QUESTIONS[0];
+    await print(first.ask, 'ask');
+    if (!alive()) return;
+    const pick = await choose(first.options.map((o) => o.label));
+    if (!alive()) return;
+    state.answers[first.key] = first.options[pick].label;
+    await print(first.options[pick].label, 'you');
+    track('gate_path', { path: pick });
+
+    const path = PATHS[pick];
+    if (path) {
+      // Camino corto: cuenta algo y pide el email. Nada de preguntas sobre el negocio.
+      await printAll(path.lines);
+      if (!alive()) return;
+      await print(path.cta, 'cta');
+      if (!alive()) return;
+      await submitLoop({ withEmail: true, button: path.button, note: path.note });
+      return;
+    }
+
+    // Camino completo ("Sí, y me da guerra").
+    await print(first.options[pick].reply);
+    for (const q of QUESTIONS.slice(1)) {
       await print(q.ask, 'ask');
       if (!alive()) return;
       const i = await choose(q.options.map((o) => o.label));
@@ -441,10 +544,16 @@ export function initGate() {
     }
     await print(`Apuntado: ${state.email}`, 'sys');
 
-    // Consentimiento y envío
     await print(ASK_CONSENT, 'ask');
+    await submitLoop({ button: MAIN_BUTTON, note: MAIN_NOTE });
+  }
+
+  /** Muestra la casilla legal (y el email si toca), envía y gestiona errores hasta que salga bien. */
+  async function submitLoop(opts: ConsentOpts) {
+    const myRun = run;
+    const alive = () => myRun === run;
     for (;;) {
-      const { website, origin } = await consent();
+      const { website, origin } = await consent(opts);
       if (!alive()) return;
       const submit = controls.querySelector<HTMLButtonElement>('[data-submit]');
       if (submit) {
@@ -457,6 +566,7 @@ export function initGate() {
         const status = res.status || 'subscribed';
         clearControls();
         track('subscribe', { status });
+        if (opts.withEmail) await print(`Apuntado: ${state.email}`, 'sys');
         await print('Hecho.', 'say');
         await print(
           status === 'pending'

@@ -1,9 +1,17 @@
 ---
+// Cada frase: [lo que crees, lo que no quieres oír]
 const truths = [
-  ['Pagaste una web que no visita ', 'ni tu madre.'],
-  ['Tu community manager es ', 'tu sobrino.'],
-  ['Pagas anuncios para que te vean ', 'tus competidores.'],
-  ['Y llevas años ', 'tirando el dinero', ' sin saber en qué.'],
+  ['Tu negocio va bien.', 'O eso te gusta pensar.'],
+  ['Tienes clientes.', 'Pero ¿cuántos no vuelven?'],
+  ['Sabes lo que vendes.', '¿Pero sabes lo que te compran?'],
+  ['Todo el mundo te da consejos.', 'Nadie se ha parado a mirar tu negocio.'],
+];
+
+// Promesas típicas de agencia. Salen sin tachar y se tachan al bajar.
+const promises = [
+  'Te prometemos resultados sin conocerte.',
+  'Te vendemos lo que no necesitas.',
+  'Te decimos lo que quieres oír.',
 ];
 ---
 
@@ -17,19 +25,33 @@ const truths = [
     <div class="spot" data-spot>
       <div class="spot__beam" aria-hidden="true"></div>
       <ul class="spot__layer spot__base display" aria-hidden="true">
-        {truths.map(([a, b, c]) => <li>{a}{b}{c}</li>)}
+        {
+          truths.map(([a, b], i) => (
+            <li>
+              <span class="spot__num">0{i + 1}</span>
+              <span class="spot__a">{a}</span>
+              <span class="spot__b">{b}</span>
+            </li>
+          ))
+        }
       </ul>
       <ul class="spot__layer spot__lit display">
-        {truths.map(([a, b, c]) => <li>{a}<span class="y">{b}</span>{c}</li>)}
+        {
+          truths.map(([a, b], i) => (
+            <li>
+              <span class="spot__num" aria-hidden="true">0{i + 1}</span>
+              <span class="spot__a">{a}</span>{' '}
+              <span class="spot__b y">{b}</span>
+            </li>
+          ))
+        }
       </ul>
     </div>
 
     <div class="manifesto">
       <p class="eyebrow">Lo que hacemos. Más o menos.</p>
-      <ul class="manifesto__nope display" data-strikes>
-        <li><span>No vendemos webs.</span></li>
-        <li><span>Ni seguidores.</span></li>
-        <li><span>Ni humo.</span></li>
+      <ul class="manifesto__nope display">
+        {promises.map((p) => <li data-strike><span>{p}</span></li>)}
       </ul>
       <p class="manifesto__yes display">
         Te auditamos el negocio y te decimos <span class="y">la puta verdad.</span>
@@ -80,14 +102,32 @@ const truths = [
   .spot__layer {
     grid-area: 1 / 1;
     display: grid;
-    gap: 0.28em;
+    gap: 0.62em;
     margin: 0;
     padding: 0;
     list-style: none;
-    font-size: clamp(32px, 5.8vw, 84px);
-    font-stretch: 72%;
+    font-size: clamp(30px, 5.2vw, 76px);
+    font-stretch: 74%;
     line-height: 0.95;
     letter-spacing: -0.025em;
+  }
+
+  .spot__layer li {
+    display: grid;
+    gap: 0.08em;
+  }
+
+  .spot__num {
+    margin-bottom: 0.35em;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    line-height: 1;
+  }
+
+  .spot__lit .spot__num {
+    color: var(--muted);
   }
 
   .spot__base {
@@ -128,43 +168,34 @@ const truths = [
 
   .manifesto__nope {
     display: grid;
-    gap: 0.06em;
+    gap: 0.32em;
     margin: 22px 0 0;
     padding: 0;
     list-style: none;
-    font-size: clamp(36px, 6vw, 84px);
-    font-stretch: 100%;
-    color: var(--dim);
+    font-size: clamp(30px, 4.6vw, 64px);
+    font-stretch: 92%;
+    line-height: 0.98;
   }
 
+  /* Al principio se leen como promesas. Al bajar, una línea amarilla las cruza
+     (se traza de izquierda a derecha, línea a línea) y el texto se apaga y se vuelve translúcido
+     para que el tachado se vea entero a través de las letras. */
   .manifesto__nope span {
-    position: relative;
-    display: inline-block;
+    color: var(--white);
+    background-image: linear-gradient(var(--yellow), var(--yellow));
+    background-repeat: no-repeat;
+    background-position: 0 55%;
+    background-size: 0% 0.09em;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+    transition:
+      background-size 0.75s var(--ease-out),
+      color 0.6s ease 0.2s;
   }
 
-  .manifesto__nope span::after {
-    content: '';
-    position: absolute;
-    left: -0.04em;
-    right: -0.04em;
-    top: 50%;
-    height: 0.09em;
-    background: var(--yellow);
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.7s var(--ease-out);
-  }
-
-  .manifesto__nope li:nth-child(2) span::after {
-    transition-delay: 0.25s;
-  }
-
-  .manifesto__nope li:nth-child(3) span::after {
-    transition-delay: 0.5s;
-  }
-
-  .manifesto__nope.is-in span::after {
-    transform: scaleX(1);
+  .manifesto__nope li.is-struck span {
+    color: rgb(243 242 236 / 0.16);
+    background-size: 100% 0.09em;
   }
 
   .manifesto__yes {
@@ -251,16 +282,29 @@ const truths = [
     }).observe(spot);
   }
 
-  const strikes = document.querySelector('[data-strikes]');
-  if (strikes) {
-    new IntersectionObserver(
-      ([entry], obs) => {
-        if (entry.isIntersecting) {
-          strikes.classList.add('is-in');
-          obs.disconnect();
-        }
+  // Cada promesa se tacha cuando llega a media pantalla, de una en una.
+  const strikes = Array.from(document.querySelectorAll<HTMLElement>('[data-strike]'));
+  let nextAt = 0;
+  const strike = (el: HTMLElement) => {
+    const now = performance.now();
+    const wait = Math.max(0, nextAt - now);
+    nextAt = Math.max(now, nextAt) + 450;
+    setTimeout(() => el.classList.add('is-struck'), wait);
+  };
+  if (strikes.length && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            io.unobserve(e.target);
+            strike(e.target as HTMLElement);
+          }
+        });
       },
-      { threshold: 0.6 },
-    ).observe(strikes);
+      { rootMargin: '0px 0px -45% 0px' },
+    );
+    strikes.forEach((el) => io.observe(el));
+  } else {
+    strikes.forEach((el) => el.classList.add('is-struck'));
   }
 </script>

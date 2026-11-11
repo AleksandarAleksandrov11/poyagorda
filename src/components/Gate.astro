@@ -7,7 +7,7 @@ import { legal, newsletterProcessor, CONSENT_VERSION } from '../config/site';
     <header class="gate__head">
       <p class="eyebrow">La puerta.</p>
       <h2 id="gate-title" class="display gate__title">
-        Tres preguntas.<br /><span class="y">Sin mentir, que se te nota.</span>
+        Responde.<br /><span class="y">Sin mentir, que se te nota.</span>
       </h2>
       <p class="gate__sub">
         Responde, déjanos tu email y serás de los primeros en enterarte de qué cojones es esto. Si no, pues nada, sigue
@@ -37,6 +37,21 @@ import { legal, newsletterProcessor, CONSENT_VERSION } from '../config/site';
 
   <template data-tpl="consent">
     <form class="term__consent" novalidate>
+      <div class="t-form term__email" data-email-row hidden>
+        <label class="t-form__prompt" for="t-in-email-short"><span aria-hidden="true">&gt;</span><span class="sr-only">Tu email</span></label>
+        <input
+          id="t-in-email-short"
+          type="email"
+          name="email"
+          inputmode="email"
+          autocomplete="email"
+          autocapitalize="off"
+          spellcheck="false"
+          maxlength="254"
+          enterkeyhint="send"
+          placeholder="Tu correo electrónico"
+        />
+      </div>
       <label class="term__check">
         <input type="checkbox" name="consent" data-consent />
         <span>Tengo 14 años o más, he leído la <a href="/privacidad" target="_blank">Política de Privacidad</a>{' '}y las{' '}<a href="/condiciones" target="_blank">Condiciones</a>, y quiero recibir la newsletter de POYAGORDA.</span>
@@ -44,6 +59,9 @@ import { legal, newsletterProcessor, CONSENT_VERSION } from '../config/site';
       <div class="term__hp" aria-hidden="true">
         <label>Web <input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
       </div>
+
+      <button type="submit" class="btn term__submit" data-submit>Meterme dentro</button>
+      <p class="term__note" data-note></p>
       <p class="term__legal">
         <strong>Responsable:</strong>{' '}POYAGORDA (identificación completa en el <a href="/aviso-legal" target="_blank">Aviso legal</a>).{' '}
         <strong>Finalidad:</strong>{' '}enviarte la newsletter y novedades de POYAGORDA.{' '}
@@ -52,7 +70,6 @@ import { legal, newsletterProcessor, CONSENT_VERSION } from '../config/site';
         <strong>Derechos:</strong>{' '}acceso, rectificación, supresión y demás, escribiendo a <a href={`mailto:${legal.email}`}>{legal.email}</a>.{' '}
         Más info en la <a href="/privacidad" target="_blank">Política de Privacidad</a>.
       </p>
-      <button type="submit" class="btn term__submit" data-submit>Meterme dentro</button>
     </form>
   </template>
 
@@ -292,6 +309,20 @@ import { legal, newsletterProcessor, CONSENT_VERSION } from '../config/site';
   }
 
   @media (max-width: 520px) {
+    /* Con el formulario delante, la terminal crece para que todo se vea sin scroll interno. */
+    .term__screen:has(.term__consent) {
+      height: auto;
+    }
+
+    .term__screen:has(.term__consent) .term__log {
+      max-height: 46svh;
+    }
+
+    .term__screen:has(.term__consent) .term__controls {
+      max-height: none;
+      overflow: visible;
+    }
+
     .term {
       margin-inline: calc(var(--gutter) * -1);
       border-inline: 0;
@@ -539,6 +570,31 @@ import { legal, newsletterProcessor, CONSENT_VERSION } from '../config/site';
     width: 1px;
     height: 1px;
     overflow: hidden;
+  }
+
+  .term__email[hidden] {
+    display: none;
+  }
+
+  .term__note {
+    margin-top: -6px;
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+
+  .term__note:empty {
+    display: none;
+  }
+
+  .t-cta {
+    color: var(--yellow);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+
+  .t-cta::before {
+    content: '';
   }
 
   .term__submit {
