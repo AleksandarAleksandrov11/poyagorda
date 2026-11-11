@@ -44,26 +44,54 @@ const QUESTIONS: Question[] = [
 ];
 
 /**
- * Caminos cortos: "Estoy en ello" y "Solo cotilleo" no preguntan por el negocio.
- * Cuentan algo y van directos al email. (El índice coincide con la opción de la primera pregunta.)
+ * Caminos cortos: "Estoy en ello" y "Solo cotilleo". Una frase, una pregunta para que
+ * el visitante participe (sin preguntarle por su negocio), su parrafada, el nombre y el email.
+ * El índice coincide con la opción de la primera pregunta.
  */
-type Path = { lines: string[]; cta: string; button: string; note: string };
+type Path = {
+  opener: string;
+  question: Question;
+  lines: string[];
+  nameReply: (name: string) => string;
+  cta: string;
+  button: string;
+  note: string;
+};
 const PATHS: Record<number, Path> = {
   1: {
+    opener: 'Llegas a tiempo de no cagarla.',
+    question: {
+      key: 'freno',
+      ask: '¿Qué te está frenando para empezar?',
+      options: [
+        { label: 'No tengo ni puta idea de por dónde empezar', reply: 'Normal. Nadie lo sabe. La diferencia es que algunos lo admiten.' },
+        { label: 'Tengo la idea, pero me falta dinero', reply: 'El dinero se encuentra. Lo jodido es no tirarlo en lo que no toca.' },
+        { label: 'Estoy esperando el momento perfecto', reply: 'Spoiler: no existe. Pero vale, esperamos contigo un rato.' },
+      ],
+    },
     lines: [
-      'Llegas a tiempo de no cagarla. Seguimos.',
       'Montar un negocio tiene dos partes.',
       'La de tener una idea cojonuda.',
       'Y la de descubrir que tener una idea cojonuda no es suficiente.',
       'De vez en cuando contamos historias que igual te ahorran algún disgusto. O te provocan otro.',
     ],
+    nameReply: (name) => `${name}. Apuntado. Ahora a ver si lo montas.`,
     cta: '¿Quieres que te las contemos?',
     button: 'Quiero estar dentro',
     note: 'Historias, ideas y alguna que otra verdad incómoda. Dos o tres correos a la semana. Baja cuando quieras.',
   },
   2: {
+    opener: 'Cotilla de mierda. Nos caes bien.',
+    question: {
+      key: 'motivo',
+      ask: '¿Y tú qué cojones haces todavía aquí?',
+      options: [
+        { label: 'Me puede la curiosidad', reply: 'Dicen que la curiosidad mató al gato. Pero el gato murió sabiendo.' },
+        { label: 'Me está haciendo gracia esta mierda', reply: 'Esa es la idea. Aguanta, que lo mejor viene ahora.' },
+        { label: 'Quiero saber quién está detrás', reply: 'Todo a su tiempo. Primero queremos saber quién eres tú.' },
+      ],
+    },
     lines: [
-      'Cotilla de mierda. Nos caes bien.',
       'No tienes un negocio. No quieres vendernos nada. Y aun así sigues aquí.',
       'Nos gusta la gente que pierde el tiempo con criterio.',
       '',
@@ -71,6 +99,7 @@ const PATHS: Record<number, Path> = {
       'Hay cosas que no vamos a publicar en Instagram.',
       'Historias, ideas y alguna que otra gilipollez que igual termina teniendo sentido.',
     ],
+    nameReply: (name) => `${name}. Nombre de cotilla profesional.`,
     cta: '¿Quieres seguir cotilleando?',
     button: 'Soy un cotilla. ¿Y qué?',
     note: 'Dos o tres correos a la semana. Sin spam. Puedes darte de baja cuando quieras.',
@@ -125,7 +154,7 @@ const EMAIL_RE = /^[^\s@]+@[^\s@.]+(\.[^\s@.]+)*\.[a-z]{2,}$/i;
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 const normalize = (s: string) =>
-  s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim();
+  s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
 
 export function initGate() {
   const term = document.querySelector<HTMLElement>('[data-term]');
@@ -443,6 +472,44 @@ export function initGate() {
 
   /* ---------- guion ---------- */
 
+  /** Pregunta con tres respuestas y su contestación. Guarda la elegida. */
+  async function askQuestion(q: Question) {
+    const myRun = run;
+    await print(q.ask, 'ask');
+    if (myRun !== run) return;
+    const i = await choose(q.options.map((o) => o.label));
+    if (myRun !== run) return;
+    state.answers[q.key] = q.options[i].label;
+    await print(q.options[i].label, 'you');
+    await print(q.options[i].reply);
+  }
+
+  /** Nombre opcional, con sus bromas. La contestación final cambia según el camino. */
+  async function askName(reply: (name: string) => string) {
+    const myRun = run;
+    await print(ASK_NAME, 'ask');
+    const rawName = (
+      await ask({ label: 'Tu nombre (opcional)', type: 'text', placeholder: 'tu nombre, o nada', autocomplete: 'given-name', maxLength: 40 })
+    ).replace(/\s+/g, ' ');
+    if (myRun !== run) return;
+    await print(rawName || '(silencio incómodo)', 'you');
+    const n = normalize(rawName);
+    const words = n.split(/[^a-zñ]+/);
+    if (!rawName) {
+      state.name = '';
+      await print('Anónimo. Misterioso. Nos gusta.');
+    } else if (n.includes('poyagorda') || n.includes('pollagorda')) {
+      state.name = '';
+      await print('Ese nombre ya está pillado, listillo. Te llamaremos Anónimo.');
+    } else if (words.some((w) => INSULTS.includes(w))) {
+      state.name = '';
+      await print('Qué original. Te vamos a llamar Anónimo, que es más elegante.');
+    } else {
+      state.name = rawName.replace(/(^|\s)\p{L}/gu, (m) => m.toUpperCase());
+      await print(reply(state.name));
+    }
+  }
+
   async function script() {
     const myRun = run;
     const alive = () => myRun === run;
@@ -465,8 +532,14 @@ export function initGate() {
 
     const path = PATHS[pick];
     if (path) {
-      // Camino corto: cuenta algo y pide el email. Nada de preguntas sobre el negocio.
+      // Camino corto: frase, una pregunta, su parrafada, nombre y email.
+      await print(path.opener);
+      if (!alive()) return;
+      await askQuestion(path.question);
+      if (!alive()) return;
       await printAll(path.lines);
+      if (!alive()) return;
+      await askName(path.nameReply);
       if (!alive()) return;
       await print(path.cta, 'cta');
       if (!alive()) return;
@@ -477,40 +550,16 @@ export function initGate() {
     // Camino completo ("Sí, y me da guerra").
     await print(first.options[pick].reply);
     for (const q of QUESTIONS.slice(1)) {
-      await print(q.ask, 'ask');
+      await askQuestion(q);
       if (!alive()) return;
-      const i = await choose(q.options.map((o) => o.label));
-      if (!alive()) return;
-      state.answers[q.key] = q.options[i].label;
-      await print(q.options[i].label, 'you');
-      await print(q.options[i].reply);
     }
 
     await printAll(PRE_NAME);
     if (!alive()) return;
 
     // Nombre
-    await print(ASK_NAME, 'ask');
-    const rawName = (
-      await ask({ label: 'Tu nombre (opcional)', type: 'text', placeholder: 'tu nombre, o nada', autocomplete: 'given-name', maxLength: 40 })
-    ).replace(/\s+/g, ' ');
+    await askName((name) => `${name}. Nombre de alguien que está a punto de dejar de tirar el dinero.`);
     if (!alive()) return;
-    await print(rawName || '(silencio incómodo)', 'you');
-    const n = normalize(rawName);
-    const words = n.split(/[^a-zñ]+/);
-    if (!rawName) {
-      state.name = '';
-      await print('Anónimo. Misterioso. Nos gusta.');
-    } else if (n.includes('poyagorda') || n.includes('pollagorda')) {
-      state.name = '';
-      await print('Ese nombre ya está pillado, listillo. Te llamaremos Anónimo.');
-    } else if (words.some((w) => INSULTS.includes(w))) {
-      state.name = '';
-      await print('Qué original. Te vamos a llamar Anónimo, que es más elegante.');
-    } else {
-      state.name = rawName.replace(/(^|\s)\p{L}/gu, (m) => m.toUpperCase());
-      await print(`${state.name}. Nombre de alguien que está a punto de dejar de tirar el dinero.`);
-    }
 
     // Email
     await print(ASK_EMAIL, 'ask');
